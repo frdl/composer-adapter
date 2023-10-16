@@ -1,11 +1,13 @@
 <?php
 
-namespace ComposerUI;
+namespace Webfan\ComposerAdapter;
 
 use Symfony\Component\Process\Process;
 use Symfony\Component\Process\ProcessUtils;
 
-class ComposerHelper
+use Webfan\InstallerInterface;
+
+class Installer implements InstallerInterface
 {
 
     /**
@@ -14,19 +16,60 @@ class ComposerHelper
      * @var string
      */
     protected $workingPath;
-
+    protected $config;
     /**
      * Create a new ComposerHelper instance.
      *
      * @param  string $workingPath
      */
-    public function __construct($workingPath = null)
+    public function __construct($workingPath = null, array $config = [])
     {
-        set_time_limit(0);
+      //  set_time_limit(0);
 
         $this->workingPath = $workingPath;
+        $this->config = $config;
     }
 
+
+ 
+
+    public function run(string $command, array $args = []);
+
+    public function setDirectory(string $dir){
+       return $this->setWorkingPath($options);
+    }
+
+  
+ 
+    /**
+     * Require one or multiple packages.
+     *
+     * @param array $packages Package name.
+     * @param array $options
+     * @return Process  
+     */
+    public function require(array | string $packages, array $options = []){
+        if(!is_array($packages)){
+           $packages = [$packages];
+        }
+        return $this->requirePackages($packages, $options);
+    }
+
+    /**
+     * Remove one or more packages.
+     *
+     * @param array $packages Package name.
+     * @param array $options
+     * @return Process  
+     */
+    public function remove(array | string $packages, array $options = []){
+        if(!is_array($packages)){
+           $packages = [$packages];
+        }
+        return $this->removePackages($packages, $options);
+    }
+
+    
     /**
      * Call composer command.
      *
@@ -40,7 +83,9 @@ class ComposerHelper
 
         return $this->runProcess($process);
     }
-
+    public function init(array $options = []){
+       return $this->composer($options);
+    }
     /**
      * Install composer packages.
      *
@@ -231,7 +276,7 @@ class ComposerHelper
      * @param  string $path
      * @return $this
      */
-    public function setWorkingPath($path)
+    protected function setWorkingPath($path)
     {
         $this->workingPath = realpath($path);
 
