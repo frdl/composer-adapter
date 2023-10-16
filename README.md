@@ -27,6 +27,7 @@ The following commands are supported for now:
 - update
 - require
 - remove
+- run(string $command, array $args = [])
 
 ### The ComposerHelper Class
 You can start using composer by creating an instance of the `ComposerUI/ComposerHelper`-class:
