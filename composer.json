@@ -2,6 +2,7 @@
   "name": "frdl/composer-adapter",
   "description": "Wrapper/UI for Composer",
   "type":"io4-adapter",
+   "license": "MIT",
   "require": {
     "php": ">=8.0"
   },
