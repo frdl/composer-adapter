@@ -4,6 +4,7 @@ namespace Webfan\ComposerAdapter;
 
 use Symfony\Component\Process\Process;
 use Symfony\Component\Process\ProcessUtils;
+use Symfony\Component\Process\PhpExecutableFinder;
 
 use Webfan\InstallerInterface;
 
@@ -110,7 +111,7 @@ class Installer implements InstallerInterface
      */
     public function archive(array $options = [])
     {
-        return $this->run( 'array', $options);
+        return $this->run( 'archive', $options);
     }
 
     /**
