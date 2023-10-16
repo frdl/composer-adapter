@@ -1,3 +1,6 @@
+# ...forked by Webfan
+...e.g to implement `Webfan\InstallerInterface`.
+
 # composer-ui
 ComposerUI for Composer
 
