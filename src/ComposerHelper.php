@@ -33,7 +33,6 @@ class Installer implements InstallerInterface
 
  
 
-    public function run(string $command, array $args = []);
 
     public function setDirectory(string $dir){
        return $this->setWorkingPath($options);
@@ -94,12 +93,16 @@ class Installer implements InstallerInterface
      */
     public function install(array $options = [])
     {
+        return $this->run( 'install', $options);
+    }
+
+    public function run(string $command, array $args = [])
+    {
         $process = $this->getProcess();
-        $process->setCommandLine($this->findComposer() . 'install' . $this->normalizeOptions($options));
+        $process->setCommandLine(sprintf($this->findComposer().'%', $command) . $this->normalizeOptions($options));
 
         return $this->runProcess($process);
     }
-
     /**
      * Generates zip/tar
      * @param array $options
@@ -107,10 +110,7 @@ class Installer implements InstallerInterface
      */
     public function archive(array $options = [])
     {
-        $process = $this->getProcess();
-        $process->setCommandLine($this->findComposer() . 'archive' . $this->normalizeOptions($options));
-
-        return $this->runProcess($process);
+        return $this->run( 'array', $options);
     }
 
     /**
@@ -121,10 +121,7 @@ class Installer implements InstallerInterface
      */
     public function update(array $options = [])
     {
-        $process = $this->getProcess();
-        $process->setCommandLine($this->findComposer() . 'update' . $this->normalizeOptions($options));
-
-        return $this->runProcess($process);
+       return $this->run( 'update', $options);
     }
 
     /**
