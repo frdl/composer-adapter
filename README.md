@@ -1,4 +1,4 @@
-# ...forked by Webfan
+# Forked from bobmulder by Webfan
 ...e.g to implement `Webfan\InstallerInterface`.
 
 # composer-ui
