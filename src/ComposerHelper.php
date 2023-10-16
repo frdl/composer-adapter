@@ -36,7 +36,7 @@ class Installer implements InstallerInterface
 
 
     public function setDirectory(string $dir){
-       return $this->setWorkingPath($options);
+       return $this->setWorkingPath($dir);
     }
 
   
