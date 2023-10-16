@@ -1,4 +1,4 @@
-# Forked from bobmulder by Webfan
+# Forked from bobmulder/composer-ui by Webfan
 ...e.g to implement `Webfan\InstallerInterface`.
 
 # composer-ui
@@ -16,7 +16,7 @@ will be the second part.
 ## Installation
 You can install this package via... Yeah... Composer:
 
-    composer require bobmulder/composer-ui:dev-master
+    composer require frdl/composer-adapter:dev-master
 
 
 ## Usage
