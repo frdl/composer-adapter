@@ -1,11 +1,33 @@
 {
-  "name": "bobmulder/composer-ui",
-  "description": "Composer tools and UI for Composer",
+  "name": "frdl/composer-adapter",
+  "description": "Wrapper/UI for Composer",
+  "type":"io4-adapter",
   "require": {
-    "symfony/process": "~3.0@dev"
+    "php": ">=8.0"
   },
+
+	"authors": [
+		{
+			"name": "Till Wehowski",
+			"email": "software@frdl.de",
+			"homepage": "https:\/\/webfan.de",
+			"role": "Developer"
+		},
+    {
+      "name" : "Bob Mulder",
+      "homepage" : "https://github.com/bobmulder/composer-ui"
+    }
+	],	
+  "repositories": [	
+    {"type": "composer", "url": "https://webfat.repo.pkg.frdl.de"},	
+    {"type": "composer", "url": "https://frdl.repo.pkg.frdl.de"},	
+    {"type": "composer", "url": "https://oidplus-plugins.repo.pkg.frdl.de"},	 
+    {"type": "composer", "url": "https://weid.repo.pkg.frdl.de"},    
+    {"type": "composer", "url": "https://repo.pkg.frdl.de"} 
+  ],	  
   "require-dev": {
-    "phpunit/phpunit": "*"
+     "frdl/remote-psr4" : "*",
+     "frdlweb/webfat": "*"
   },
   "autoload": {
     "psr-4": {
@@ -16,5 +38,13 @@
     "psr-4": {
     }
   },
-  "minimum-stability": "dev"
+  "minimum-stability": "dev",
+  "suggest" : {
+        
+  },
+  "extra" : {
+      "webfan" : {
+
+      }
+  }
 }
