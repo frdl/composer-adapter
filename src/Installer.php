@@ -170,8 +170,18 @@ class Installer implements InstallerInterface
      */
     public function findComposer(?bool $which = true) : string
     {
-        if (!file_exists($this->workingPath . '/composer.phar')) {
-            return 'composer ';
+        if (!file_exists($this->workingPath . '/composer.phar')) {           
+            try{
+                 $c = function_exists('exec') ? exec('which composer') : 'composer';
+                if(!empty($c) ){
+                    $c.=' ';
+                }else{
+                    $c = 'composer ';
+                }
+            }catch(\Exception $e){
+                 $c = 'composer ';
+            }
+            return $c;
         }
 
         $binary = ProcessUtils::escapeArgument((new PhpExecutableFinder)->find(false));
