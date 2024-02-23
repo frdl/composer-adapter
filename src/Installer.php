@@ -2,11 +2,14 @@
 
 namespace Webfan\ComposerAdapter;
 
+
 use Symfony\Component\Process\Process;
 use Symfony\Component\Process\ProcessUtils;
 use Symfony\Component\Process\PhpExecutableFinder;
 
 use Webfan\InstallerInterface;
+use Webfan\InstallerSequenceInterface;
+use Webfan\InstallerEventsInterface;
 
 class Installer implements InstallerInterface
 {
@@ -78,10 +81,7 @@ class Installer implements InstallerInterface
      */
     public function composer(array $options = [])
     {
-        $process = $this->getProcess();
-        $process->setCommandLine($this->findComposer() . $this->normalizeOptions($options));
-
-        return $this->runProcess($process);
+       return $this->run( '', $options);
     }
     public function init(array $options = []){
        return $this->composer($options);
@@ -168,7 +168,7 @@ class Installer implements InstallerInterface
      *
      * @return string
      */
-    protected function findComposer()
+    public function findComposer(?bool $which = true) : string
     {
         if (!file_exists($this->workingPath . '/composer.phar')) {
             return 'composer ';
@@ -183,6 +183,28 @@ class Installer implements InstallerInterface
         return "{$binary} composer.phar ";
     }
 
+    
+//https://getcomposer.org/doc/faqs/how-to-install-composer-programmatically.md
+/* 
+#!/bin/sh
+
+EXPECTED_CHECKSUM="$(php -r 'copy("https://composer.github.io/installer.sig", "php://stdout");')"
+php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+ACTUAL_CHECKSUM="$(php -r "echo hash_file('sha384', 'composer-setup.php');")"
+
+if [ "$EXPECTED_CHECKSUM" != "$ACTUAL_CHECKSUM" ]
+then
+    >&2 echo 'ERROR: Invalid installer checksum'
+    rm composer-setup.php
+    exit 1
+fi
+
+php composer-setup.php --quiet
+RESULT=$?
+rm composer-setup.php
+exit $RESULT
+*/
+    
     /**
      * Get a new Symfony process instance.
      *
@@ -255,6 +277,7 @@ class Installer implements InstallerInterface
      * @param array $options
      * @return string
      */
+    //https://getcomposer.org/doc/03-cli.md
     protected function normalizeOptions(array $options)
     {
         $optionsList = [];
