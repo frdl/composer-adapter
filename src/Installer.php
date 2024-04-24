@@ -168,7 +168,7 @@ class Installer implements InstallerInterface
      *
      * @return string
      */
-    public function findComposer(?bool $tryGlobal = false, ?bool $preInstall = false) : string
+    public function findComposer(?bool $tryGlobal = true, ?bool $preInstall = false) : string
     {
         if (!file_exists($this->workingPath . '/composer.phar') || true === $tryGlobal ) {           
             try{
@@ -201,7 +201,23 @@ class Installer implements InstallerInterface
         return "{$binary} composer.phar ";
     }
 
+    
+    public function available(?string $toPath = null, ?bool $tryGlobal = false) : bool
+    {
+        $available = false;
+        if(null === $toPath){
+          $toPath = $this->workingPath;
+        }
+           try{
+                $available = 'string' === $this->findCommandPath( $tryGlobal , false);
+            }catch(\Exception $e){
 
+               $available = false;
+            }                   
+
+        return $available;
+    }
+    
     public function findCommandPath(?bool $tryGlobal = false, ?bool $preInstall = false) : string
     {
        return $this->findComposer($tryGlobal, $preInstall);
@@ -226,12 +242,14 @@ RESULT=$?
 rm composer-setup.php
 exit $RESULT
 */
-    public function preInstall(?string $toPath = null, ?bool $tryGlobal = false)
+    public function preInstall(?string $toPath = null, ?bool $tryGlobal = false) : bool
     {
         if(null === $toPath){
           $toPath = $this->workingPath;
         }
            throw new \Exception('Not implemented yet in '.__METHOD__);
+
+        return false;
     }
 
     
