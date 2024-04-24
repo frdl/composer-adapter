@@ -168,9 +168,9 @@ class Installer implements InstallerInterface
      *
      * @return string
      */
-    public function findComposer(?bool $which = true) : string
+    public function findComposer(?bool $tryGlobal = false, ?bool $preInstall = false) : string
     {
-        if (!file_exists($this->workingPath . '/composer.phar')) {           
+        if (!file_exists($this->workingPath . '/composer.phar') || true === $tryGlobal ) {           
             try{
                  $c = function_exists('exec') ? exec('which composer') : 'composer';
                 if(!empty($c) ){
@@ -178,11 +178,19 @@ class Installer implements InstallerInterface
                 }else{
                     $c = 'composer ';
                 }
+                 return $c;
             }catch(\Exception $e){
-                 $c = 'composer ';
-            }
-            return $c;
+                  
+            }           
         }
+
+        if (!file_exists($this->workingPath . '/composer.phar') && true === $preInstall ) {           
+            $this->preInstall($this->workingPath, $tryGlobal);
+        }
+
+        if (!file_exists($this->workingPath . '/composer.phar')   ) {           
+            throw new \Exception('command path not found in '.__METHOD__);
+        }        
 
         $binary = ProcessUtils::escapeArgument((new PhpExecutableFinder)->find(false));
 
@@ -193,7 +201,11 @@ class Installer implements InstallerInterface
         return "{$binary} composer.phar ";
     }
 
-    
+
+    public function findCommandPath(?bool $tryGlobal = false, ?bool $preInstall = false) : string
+    {
+       return $this->findComposer($tryGlobal, $preInstall);
+    }
 //https://getcomposer.org/doc/faqs/how-to-install-composer-programmatically.md
 /* 
 #!/bin/sh
@@ -214,6 +226,14 @@ RESULT=$?
 rm composer-setup.php
 exit $RESULT
 */
+    public function preInstall(?string $toPath = null, ?bool $tryGlobal = false)
+    {
+        if(null === $toPath){
+          $toPath = $this->workingPath;
+        }
+           throw new \Exception('Not implemented yet in '.__METHOD__);
+    }
+
     
     /**
      * Get a new Symfony process instance.
