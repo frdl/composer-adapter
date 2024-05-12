@@ -5,8 +5,7 @@
   "require": {
     "php": ">=8.0"
   },
-
-	"authors": [
+ "authors": [
 		{
 			"name": "Till Wehowski",
 			"email": "software@frdl.de",
@@ -37,12 +36,6 @@
     }
   },
   "minimum-stability": "dev",
-  "suggest" : {
-        
-  },
-  "extra" : {
-      "webfan" : {
-
-      }
+  "suggest" : {        
   }
 }
