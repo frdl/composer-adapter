@@ -1,7 +1,6 @@
 {
   "name": "frdl/composer-adapter",
-  "description": "Wrapper/UI for Composer",
-  "type":"io4-adapter",
+  "description": "Wrapper/UI for Composer", 
    "license": "MIT",
   "require": {
     "php": ">=8.0"
@@ -26,9 +25,7 @@
     {"type": "composer", "url": "https://weid.repo.pkg.dev.frdl.de"},    
     {"type": "composer", "url": "https://repo.pkg.dev.frdl.de"} 
   ],	  
-  "require-dev": {
-     "frdl/remote-psr4" : "*",
-     "frdlweb/webfat": "*"
+  "require-dev": { 
   },
   "autoload": {
     "psr-4": {
