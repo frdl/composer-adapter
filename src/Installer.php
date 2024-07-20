@@ -284,7 +284,7 @@ exit $RESULT
          $result = $this->runProcess($process);
 
         
-        return false;
+        return $result;
     }
 
     
