@@ -279,10 +279,11 @@ exit $RESULT
         $command = "{$binary} composer-setup.php";
         
         
-         $process->setCommandLine(sprintf( ' --php'.' % --quiet', $command) . $this->normalizeOptions($args));
+         $process->setCommandLine(sprintf( ' --php'.' %', $command) . $this->normalizeOptions(['--quiet']));
 
          $result = $this->runProcess($process);
 
+          unlink($setupfile);
         
         return $result;
     }
