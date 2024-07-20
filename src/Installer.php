@@ -244,6 +244,10 @@ exit $RESULT
 */
     public function preInstall(?string $toPath = null, ?bool $tryGlobal = false) : bool
     {
+        if(true === $this->available($toPath, true)){
+           return true;
+        }
+        
         if(null === $toPath){
           $toPath = $this->workingPath;
         }
