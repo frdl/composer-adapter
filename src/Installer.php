@@ -100,7 +100,7 @@ class Installer implements InstallerInterface
     public function run(string $command, array $args = [])
     {
         $process = $this->getProcess();
-        $process->setCommandLine(sprintf($this->findComposer().'%', $command) . $this->normalizeOptions($options));
+        $process->setCommandLine(sprintf($this->findComposer().'%', $command) . $this->normalizeOptions($args));
 
         return $this->runProcess($process);
     }
@@ -170,7 +170,7 @@ class Installer implements InstallerInterface
      */
     public function findComposer(?bool $tryGlobal = true, ?bool $preInstall = false) : string
     {
-        if (!file_exists($this->workingPath . '/composer.phar') || true === $tryGlobal ) {           
+        if (!file_exists($this->workingPath . \DIRECTORY_SEPARATOR.'composer.phar') || true === $tryGlobal ) {           
             try{
                  $c = function_exists('exec') ? exec('which composer') : 'composer';
                 if(!empty($c) ){
@@ -184,11 +184,11 @@ class Installer implements InstallerInterface
             }           
         }
 
-        if (!file_exists($this->workingPath . '/composer.phar') && true === $preInstall ) {           
+        if (!file_exists($this->workingPath . \DIRECTORY_SEPARATOR.'composer.phar') && true === $preInstall ) {           
             $this->preInstall($this->workingPath, $tryGlobal);
         }
 
-        if (!file_exists($this->workingPath . '/composer.phar')   ) {           
+        if (!file_exists($this->workingPath . \DIRECTORY_SEPARATOR.'composer.phar')   ) {           
             throw new \Exception('command path not found in '.__METHOD__);
         }        
 
@@ -247,8 +247,43 @@ exit $RESULT
         if(null === $toPath){
           $toPath = $this->workingPath;
         }
-           throw new \Exception('Not implemented yet in '.__METHOD__);
+        
+          // throw new \Exception('Not implemented yet in '.__METHOD__);
 
+         $setupfile =  $this->workingPath.\DIRECTORY_SEPARATOR.'composer-setup.php';
+         $checksumfile = $this->workingPath.\DIRECTORY_SEPARATOR.'composer-installer.sig';
+        if(!file_exists($checksumfile) || filemtime($checksumfile) < 5 * 60){
+               $EXPECTED_CHECKSUM = file_get_contents('https://composer.github.io/installer.sig');
+               file_put_contents($checksumfile,$EXPECTED_CHECKSUM);
+        }else{
+            $EXPECTED_CHECKSUM = file_get_contents($checksumfile);
+        }
+
+        if(!file_exists($setupfile) || filemtime($setupfile) < 5 * 60){
+            copy('https://getcomposer.org/installer', $setupfile);
+        }
+
+        
+           $ACTUAL_CHECKSUM =  hash_file('sha384',$setupfile);
+
+           if($EXPECTED_CHECKSUM !== $ACTUAL_CHECKSUM){
+              unlink($setupfile);
+           }
+
+         $process = $this->getProcess();
+
+        $binary = ProcessUtils::escapeArgument((new PhpExecutableFinder)->find(false));
+        if (defined('HHVM_VERSION')) {
+            $binary .= ' --php';
+        }
+        $command = "{$binary} composer-setup.php";
+        
+        
+         $process->setCommandLine(sprintf( ' --php'.' % --quiet', $command) . $this->normalizeOptions($args));
+
+         $result = $this->runProcess($process);
+
+        
         return false;
     }
 
